@@ -884,57 +884,115 @@ es NP-completo.
 
 Prueba:
 
-se deben demostrar dos condiciones fundamentales:
+Se deben demostrar dos condiciones fundamentales:
 
-1. su pertenencia a la clase NP.
-    * un problema pertenece a la clase NP si
-    dada una solución propuesta se puede verificar en tiempo polinomial.
-2. si es NP-hard
-    * un problema es NP-hard si:
-    TODOS los problemas NP pueden reducirse a él en tiempo polinomial.
-    <=> es difícil como el problema más difícil de NP.
-    para esto lo vamos a comparar con un problema NP-completo conocido (3sat)
+1. **Su pertenencia a la clase NP:**
+  Dada una solución propuesta, se puede verificar en tiempo polinomial.
+2. **Si es NP-Hard:**
+  Todos los problemas en NP pueden reducirse a él en tiempo polinomial
+  (para esto, probaremos $3SAT \leq_P 3COLOR$).
 
-entonces:
+entonces
 
-1. 3-color es NP:
-    * una solución es una coloración en {0, 1, 2} de los 𝑛 vértices del grafo.
-    * Se verifica recorriendo todas las aristas 𝑢𝑣 y viendo que 𝐶(𝑢) ≠ 𝐶(𝑣).
-    * es de complejidad 𝑂(𝑚), con 𝑚 = número de aristas, claramente polinomial.
-2. 3-color es NP-hard:
-    * probaré que 3SAT ≤ 3COLOR.
+1. 3-COLOR es NP
+    * Una solución propuesta es una asignación de colores $C: V \to \{0, 1, 2\}$
+      para los $n$ vértices del grafo.
+    * Se verifica recorriendo todas las aristas $uv \in E$ y
+      comprobando que $C(u) \neq C(v)$.
+    * Esta verificación tiene una complejidad de $O(m)$,
+      con $m = \vert{}E\vert{}$, lo cual es claramente polinomial.
 
-3SAT ≤ 3COLOR
-Para ello,
-debemos transformar en tiempo polinomial un elemento B
-del dominio (conjunto de instancias) de 3SAT a un elemento
-A(B) = G del dominio de 3COLOR, mostrando que B es satisfacible sii G es 3-colorable.
+2. 3-COLOR es NP-Hard ($3SAT \leq_P 3COLOR$)
 
-Sabemos que B es de la forma D1∧…∧Dm con variables x1, …, xi,
-donde Dj = lj1 ∨ lj2 ∨ lj3, con ljk = x_algo o x^c_algo.
+Debemos transformar en tiempo polinomial una instancia $B$ de 3SAT
+en un grafo $G$, mostrando que $B$ es satisfacible $\iff$ $G$ es 3-colorable.
 
-A transforma a B en G de la siguiente forma:
+Sabemos que $B$ es de la forma $D_1 \land \dots \land D_m$ con variables $x_1,
+\dots, x_n$, donde cada cláusula es $D_j = l_{j1} \lor l_{j2} \lor l_{j3}$,
+y $l_{jk}$ es una variable o su negación.
 
-* V(G) =
-  {u1, …, ui, w1, …, wi} ∪
-  {∪^m_{j=1} {a_{j1}, a_{j2}, a_{j3}, e_{j1}, e_{j2}, e_{j3}}} ∪
-  {CAPI, t}
+**Construcción del Grafo $G$ (Gadgets):**
 
-* E(G) =
-  * Triángulos = {(u_it), (tw_i), (w_iu_i)} con i=1, …, n
-  * Garras =
-    {a_{j1}a_{j2}, a_{j2}a_{j3}, a_{j3}a_{j1}} con j=1, …, m ∪
-    {a_{j1}e_{j1}, a_{j2}e_{j2}, a_{j3}e_{j3}} con j=1, …, m
-  * Lados = {(CAPI)e_{jr}} con j=1, …, m y r = 1,2,3
-  * Lados = {(CAPI)t}
-  * Lados = {e_{jr}(v(l_{jr}))} con j=1, …, m y r = 1,2,3
-    * v(l_{jr}) = u_q si ∃q : l_{jr} = x_q
-    * v(l_{jr}) = w_q si ∃q : l_{jr} = x^c_q
+* **Vértices $V(G)$:**
+$\{u_1, \dots, u_n, w_1, \dots, w_n\}$ (para las variables) $\cup$
+$\bigcup_{j=1}^m \{a_{j1}, a_{j2}, a_{j3}, e_{j1}, e_{j2}, e_{j3}\}$ (cláusulas)
+$\cup$ $\{CAPI, t\}$ (vértices base).
+* **Aristas $E(G)$:**
+* Triángulos de variables:
+  $\{(u_i, t), (t, w_i), (w_i, u_i)\}$ para $i = 1, \dots, n$.
+* Garras de cláusulas:
+  $\{(a_{j1}, a_{j2}), (a_{j2}, a_{j3}), (a_{j3}, a_{j1})\}$ y
+  $\{(a_{jr}, e_{jr})\}$ para $j = 1, \dots, m$ y $r = 1,2,3$.
+* Conexiones base:
+  $\{(CAPI, e_{jr})\}$ para $j = 1, \dots, m$ y $r = 1,2,3$
+  $\{(CAPI, t)\}$.
+* Conexiones de literales:
+  $\{(e_{jr}, v(l_{jr}))\}$ donde $v(l_{jr}) = u_q$ si el literal es $x_q$,
+  o $v(l_{jr}) = w_q$ si el literal es $\neg x_q$.
 
-B satisfacible sii χ(G) ≤ 3
+$\chi(G) \leq 3 \implies B$ satisfacible
 
-* ⇐
-* ⇒  
+* Como en $G$ hay triángulos, necesitamos al menos 3 colores: $\chi(G) = 3$.
+* Sea $C$ un coloreo propio de $G$ con colores $\{T, F, Z\}$.
+* Como $(CAPI, t)$ es un lado, podemos asumir sin pérdida de generalidad que
+  $C(CAPI) = T$ y $C(t) = F$.
+* Definimos el vector de asignación $\vec{b}$ para $B$:
+* $b_i = 1$ si $C(u_i) = C(CAPI) = T$
+* $b_i = 0$ en caso contrario (es decir, $C(u_i) = Z$)
+
+* Para probar que $B(\vec{b}) = 1$, hay que ver que
+  $\forall j, \exists r : l_{jr}(\vec{b}) = 1$.
+* Sea $j \in \{1, \dots, m\}$. Como los $a_{jr}$ forman un triángulo,
+  uno de ellos debe tener el color de $t$.
+  Es decir, $\exists r : C(a_{jr}) = C(t) = F$.
+* Como $e_{jr}a_{jr} \in E(G) \implies C(e_{jr}) \neq C(a_{jr}) = F$.
+* Como $e_{jr}(CAPI) \in E(G) \implies C(e_{jr}) \neq C(CAPI) = T$.
+* Por lo tanto, obligatoriamente **$C(e_{jr}) = Z$**.
+* Como $e_{jr}v(l_{jr}) \in E(G) \implies C(v(l_{jr})) \neq C(e_{jr}) = Z$.
+* Como $tv(l_{jr}) \in E(G) \implies C(v(l_{jr})) \neq C(t) = F$.
+* Por lo tanto, obligatoriamente **$C(v(l_{jr})) = T$** (el color de CAPI).
+* Al tener el vértice el color de CAPI,
+  esto implica por nuestra definición que el literal es verdadero:
+  $l_{jr}(\vec{b}) = 1$.
+* Como esto ocurre para toda cláusula $j$, $B$ es satisfacible $\blacksquare$
+
+$B$ satisfacible $\implies \chi(G) \leq 3$
+
+Supongamos que $B$ es satisfacible por una asignación de verdad $\vec{b}$.
+Construiremos un 3-coloreo válido para $G$ usando los colores $\{T, F, Z\}$.
+
+1. **Vértices Base:** Asignamos $C(CAPI) = T$ y $C(t) = F$.
+2. **Vértices de Variables ($u_i, w_i$):**
+    * Si $b_i = 1$, asignamos $C(u_i) = T$ y $C(w_i) = Z$.
+    * Si $b_i = 0$, asignamos $C(u_i) = Z$ y $C(w_i) = T$.
+    * (Esto es válido porque forman un triángulo con $t=F$ y nunca comparten color).
+
+3. **Vértices de Cláusulas ($a_{jr}, e_{jr}$):**
+    * Como $\vec{b}$ satisface $B$, en cada cláusula $j$ existe al menos un
+      literal verdadero. Elegimos uno y lo llamamos $r$.
+    * Dado que el literal $r$ es verdadero,
+      sabemos por el paso anterior que su vértice asociado
+      tiene color $T$ ($C(v(l_{jr})) = T$).
+    * **Para el literal verdadero ($r$):**
+    * Coloreamos su brazo: $C(e_{jr}) = Z$.
+      (Válido porque se conecta a CAPI ($T$) y a $v(l_{jr})$ ($T$)).
+    * Coloreamos su vértice de garra: $C(a_{jr}) = F$.
+      (Válido porque se conecta a $e_{jr}$ ($Z$)).
+
+* **Para los otros dos literales falsos (llamémoslos $p$ y $q$):**
+* Coloreamos sus brazos: $C(e_{jp}) = C(e_{jq}) = F$.
+  (Válido porque se conectan a CAPI ($T$) y a sus respectivos vértices $v$ que,
+  como son literales falsos o verdaderos remanentes,
+  tienen color $Z$ o $T$. Ninguno es $F$).
+* Coloreamos sus vértices de garra: $C(a_{jp}) = T$ y $C(a_{jq}) = Z$.
+
+* (Esto es válido porque el triángulo interno de la garra
+  $a_{jr}, a_{jp}, a_{jq}$ queda coloreado perfectamente con
+  los tres colores distintos: $F, T, Z$).
+
+Como pudimos asignar colores válidos a todos los vértices del grafo $G$ sin que
+ninguna arista conecte dos vértices del mismo color,
+concluimos que $G$ es 3-colorable ($\chi(G) \leq 3$) $\blacksquare$
 
 ---
 
