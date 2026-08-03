@@ -39,7 +39,7 @@
     * B:
       * [15. 3-color (15)](#3-color-es-np-completo)
     * C:
-      * [07. Max flow Min cut](<#max-flow-min-cut>)
+      * [07. Max flow Min cut](<#ƒ-flujo-maximal--corte-minimal-𝑆--𝓋ƒ--cap𝑆-de-final>)
       * [08. Baby Brooks](<#baby-brooks>)
       * [09. Teorema de Hall](<#teorema-de-hall>)
       * [10. Matrimonio de König](<#matrimonio-de-kőnig>)
@@ -390,7 +390,7 @@ Tomo 𝑥 ∈ 𝐴 : 𝑑𝑘+1(𝑥) = min{𝑑𝑘+1(𝑦) : 𝑦 ∈ 𝐴}
   (en el paso 𝑘+1 hay un ƒ-c.a. entre 𝓈 y 𝑥)
 
 ∵ 𝑑𝑘+1(𝓈) = 𝑑𝑘(𝓈) = 0 => 𝓈 ∉ 𝐴 => 𝑥 ≠ 𝓈
-=> tiene un elemento inmediatamente anterior en cualquier camino
+=> 𝑥 tiene un elemento inmediatamente anterior
 
 Sea 𝑝𝑘+1 el menor ƒ𝑘+1-c.a. entre 𝓈 y 𝑥, de longitud 𝑑𝑘+1(𝑥)
 formando un camino 𝑝𝑘+1, de la forma 𝓈…𝑧𝑥,
@@ -403,18 +403,25 @@ con 𝑧 el elemento inmediatamente anterior de 𝑥
 ∵ 𝑑𝑘+1(𝑧) < 𝑑𝑘+1(𝑥) y 𝑥 es el elemento de 𝐴 con menor 𝑑𝑘+1
 => 𝑧 ∉ 𝐴 => 𝑑𝑘(𝑧) ≤ 𝑑𝑘+1(𝑧)
 
-∵ 𝑑𝑘+1(𝑧) < 𝑑𝑘+1(𝑥), 𝑑𝑘+1(𝑥) < ∞ y 𝑑𝑘(𝑧) ≤ 𝑑𝑘+1(𝑧)
+∵ 𝑑𝑘(𝑧) ≤ 𝑑𝑘+1(𝑧) < 𝑑𝑘+1(𝑥) < ∞
 => 𝑑𝑘(𝑧) < ∞
-=> ∃ƒ𝑘+1-c.a. 𝑝𝑘 de longitud mínima entre 𝓈 y 𝑧 de la forma 𝓈…𝑧
+=> ∃ƒ𝑘-c.a. 𝑝𝑘 de longitud mínima entre 𝓈 y 𝑧 de la forma 𝓈…𝑧
+
+En el paso 𝑘+1 está disponible el arco residual 𝑧𝑥,
+veamos si está disponible en el paso 𝑘 hay 2 casos:
 
 * si →𝑧𝑥 es un lado:
   * En principio, podríamos poner 𝑥 al final de 𝑝𝑘, pero si hago eso queda:
-    * 𝑑𝑘(𝑥) ≤ 𝑑𝑘(𝑧) + 1 ≤ 𝑑𝑘+1(𝑧) = 𝑑𝑘+1(𝑥) => 𝑑𝑘(𝑥) ≤ 𝑑𝑘+1(𝑥)
+    * 𝑑𝑘(𝑥) ≤ 𝑑𝑘(𝑧) + 1 ≤ 𝑑𝑘+1(𝑧) + 1 = 𝑑𝑘+1(𝑥) => 𝑑𝑘(𝑥) ≤ 𝑑𝑘+1(𝑥)
     * lo que es absurdo porque 𝑥 ∈ 𝐴
     * => no se puede poner 𝑥 al final de 𝑝𝑘 => ƒ𝑘(→𝑧𝑥) = 𝑐(→𝑧𝑥)
-  * Pero en 𝑝𝑘+1 está el lado →𝑧𝑥
+  * Pero en 𝑝𝑘+1 está disponible el lado →𝑧𝑥
+    * ∵ no lo puedo usar ahora =>
+    * debió haberse desocupado en este paso (𝑘)
     * => para pasar de ƒ𝑘 a ƒ𝑘+1 lo usé backwards
-    * => ∃c.a. de longitud mínima (por EK) 𝑝'𝑘 de forma 𝓈…←𝑥𝑧…𝓉
+    * ∵ no se puede recorrer el mismo vértice 2 veces, 𝑥 va antes que 𝑧
+    * => 𝑝𝑘 es de la forma 𝓈…←𝑥𝑧…𝓉
+    * ∵ en EK el uso de un vértice 𝑦 y en un paso 𝑗 siempre es en 𝑑𝑗(𝑦)
     * => 𝑑𝑘(𝑧) = 𝑑𝑘(𝑥) + 1
     * ∵ 𝑑𝑘(𝑧) = 𝑑𝑘(𝑥) + 1 > 𝑑𝑘+1(𝑥) + 1 = 𝑑𝑘+1(𝑧) + 2 ≥ 𝑑𝑘(𝑧) + 2
     * => 𝑑𝑘(𝑧) > 𝑑𝑘(𝑧) + 2 (ABSURDO)
@@ -424,8 +431,12 @@ con 𝑧 el elemento inmediatamente anterior de 𝑥
     * lo que es absurdo porque 𝑥 ∈ 𝐴
     * => no se puede poner 𝑥 al final de 𝑝𝑘 => ƒ𝑘(→𝑥𝑧) = 0
   * Pero en 𝑝𝑘+1 está el lado ←𝑧𝑥
+    * ∵ no lo puedo usar ahora
+    * => debió haber recibido flujo en este paso (𝑘)
     * => para pasar de ƒ𝑘 a ƒ𝑘+1 lo usé forwards
-    * => ∃c.a. de longitud mínima (por EK) 𝑝'𝑘 de forma 𝓈…𝑥𝑧…𝓉
+    * ∵ no se puede recorrer el mismo vértice 2 veces, 𝑥 va antes que 𝑧
+    * => 𝑝𝑘 es de la forma 𝓈…𝑥𝑧…𝓉
+    * ∵ en EK el uso de un vértice 𝑦 y en un paso 𝑗 siempre es en 𝑑𝑗(𝑦)
     * => 𝑑𝑘(𝑧) = 𝑑𝑘(𝑥) + 1
     * ∵ 𝑑𝑘(𝑧) = 𝑑𝑘(𝑥) + 1 > 𝑑𝑘+1(𝑥) + 1 = 𝑑𝑘+1(𝑧) + 2 ≥ 𝑑𝑘(𝑧) + 2
     * => 𝑑𝑘(𝑧) > 𝑑𝑘(𝑧) + 2 (ABSURDO)
@@ -516,7 +527,7 @@ cmp(encontrar c.a.) = cmp(BFS) = 𝑂(𝑚)
 => cmp(EK) = (𝑂(𝑛) + 𝑂(𝑚)) * cantidad de c.a.
 
 ∵ solo en una componente conexa de 𝓈 ~ 𝓉 se puede transportar flujo
-  => 𝑛 - 1 ≤ 𝑚 (con 𝑛 - 1 = 𝑚 solo en una componente conexa 𝑁 con Δ(𝑁))
+  => 𝑛 - 1 ≤ 𝑚 (con 𝑛 - 1 = 𝑚 solo si Δ(𝑁) = 2)
   => 𝑂(𝑛) ≤ 𝑂(𝑚)
 
 => cmp(EK) = 𝑂(𝑚) * cantidad de c.a.
