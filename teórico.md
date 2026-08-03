@@ -35,7 +35,7 @@
       * [02. 𝑏𝑘(𝑥) ≤ 𝑏𝑘+1(𝑥)](<#𝑏𝑘𝑥--𝑏𝑘1𝑥>)
       * [03. 𝑑𝑘(𝑥) ≤ 𝑑𝑘+1(𝑥)](<#𝑑𝑘𝑥--𝑑𝑘1𝑥>)
       * [04. Complejidad de Dinitz](<#complejidad-de-dinitz>)
-      * [05. Complejidad de Wave](<#complejidad-de-wave>)
+      * [05. (Falta) Complejidad de Wave](<#complejidad-de-wave>)
     * B:
       * [15. 3-color (15)](#3-color-es-np-completo)
     * C:
@@ -43,10 +43,10 @@
       * [08. Baby Brooks](<#baby-brooks>)
       * [09. Teorema de Hall](<#teorema-de-hall>)
       * [10. Matrimonio de König](<#matrimonio-de-kőnig>)
-      * [11. Complejidad del Húngaro](<#complejidad-del-algoritmo-húngaro>)
+      * [11. (Falta) Complejidad del Húngaro](<#complejidad-del-algoritmo-húngaro>)
       * [12. Cota de Hamming](<#cota-de-hamming>)
-      * [13. Distancia Mínima y Matriz de Chequeo](<#teorema-de-la-distancia-mínima-y-la-matriz-de-chequeo>)
-      * [14. Polinomio Generador](<#polinomio-generador>)
+      * [13. (Falta) Distancia Mínima y Matriz de Chequeo](<#teorema-de-la-distancia-mínima-y-la-matriz-de-chequeo>)
+      * [14. (Falta) Polinomio Generador](<#polinomio-generador>)
 
 ---
 
@@ -998,11 +998,75 @@ concluimos que $G$ es 3-colorable ($\chi(G) \leq 3$) $\blacksquare$
 
 ## Códigos
 
-### Cota de Hamming
+### Corrección de errores
 
-Sean 𝐶 ⊆ {0, 1}^𝑛; 𝛿 = 𝛿(𝑐) y 𝑡 = floor((𝛿−1)2)
+Def. La distancia de Hamming entre dos palabras 𝛼, 𝛾 ∈ {0, 1}∗
+es 𝑑𝐻 = #{𝑖 : 𝛼𝑖 ≠ 𝛾𝑖 }.
+
+Def. El disco de radios alrededor de 𝛼 ∈ {0, 1}^𝑛
+es 𝐷_𝑟(𝛼) = {𝛾 ∈ {0, 1}^𝑛 : 𝑑𝐻 (𝛼, 𝛾) ≤ 𝑟}
+
+Def. Un código 𝐶 ⊆ {0, 1}^𝑛 detecta (hasta) 𝑟 errores si
+∀𝛼 ∈ 𝐶 : 𝐷𝑟 (𝛼) ∩ 𝐶 = {𝛼}
+
+Def. Un código 𝐶 ⊆ {0, 1}^𝑛 corrige hasta 𝑡 errores si
+∀𝛼, 𝛾 ∈ 𝐶 : 𝛼 ≠ 𝛾 : 𝐷𝑡(𝛼) ∩ 𝐷𝑡(𝛾) = ∅
+
+Def. Dado 𝐶 ⊆ {0, 1}^𝑛, definimos
+𝛿(𝐶) = min{𝑑𝐻 (𝛼, 𝛾) : 𝛼, 𝛾 ∈ 𝐶 ∧ 𝛼 ≠ 𝛾}
+
+Teo. Sea 𝐶 ⊆ {0, 1}^𝑛 y 𝛿 = 𝛿(𝐶). Entonces (
+
+1) 𝐶 detecta 𝛿 − 1 errores, pero no detecta 𝛿;
+2) Si 𝑡 = floor((𝛿−1)/2), entonces 𝐶 corrige 𝑡 errores pero no 𝑡 + 1.
+
+#### Cota de Hamming
+
+Sean 𝐶 ⊆ {0, 1}^𝑛; 𝛿 = 𝛿(𝑐) y 𝑡 = floor((𝛿−1)/2)
 Entonces:
 |𝐶| ≤ 2^𝑛/ 1 + 𝑛 + 𝑛𝐶2 + … + 𝑛𝐶𝑡 (𝑛𝐶𝑘 = 𝑛!/(𝑘!(𝑛−𝑘)!))
+
+Prueba:
+
+Sea 𝐴 = ∪_{𝑣 ∈ 𝐶} 𝐷𝑡(𝑣).
+∴ 𝑡 = floor((𝛿−1)/2),
+  => 𝐶 corrige 𝑡 errores
+  ∀𝑣, 𝑤 ∈ 𝐶 : 𝑣 ≠ 𝑤 : 𝐷𝑡(𝑣) ∩ 𝐷𝑡(𝑤) = ∅
+    (la unión 𝐴 es disjunta)
+
+  => |𝐴| = ∑_{𝑣 ∈ 𝐶} |𝐷𝑡(𝑣)|
+
+Sean 𝑆𝑟(𝑣) = {𝑤 ∈ {0, 1}^𝑛 : 𝑑𝐻(𝑣, 𝑤) = 𝑟}
+=> 𝐷𝑡(𝑣) = ∪_{𝑟 = 0}^{𝑡} 𝑆𝑟(𝑣) (unión obviamente disjunta)
+
+|𝐷𝑡(𝑣)| = ∑_{𝑟 = 0}^{𝑡} |𝑆𝑟(𝑣)|
+
+veamos cuanto vale |𝑆𝑟(𝑣)|:
+
+𝑤 ∈ 𝑆𝑟(𝑣) <=> 𝑑𝐻(𝑣, 𝑤) = 𝑟
+<=> 𝑤 difiere en exactamente 𝑟 bits de 𝑣
+
+=>  hay un subconjunto de los 𝑛 bits de las palabras que tiene 𝑟 elementos tq
+𝑤 difiere de 𝑣 en esos 𝑟 bits.
+
+* dado 𝑤 ∈ 𝑆𝑟(𝑣) puedo obtener 𝑟 bits de en los que 𝑤 difiere de 𝑣
+* dado un conjunto de 𝑟 bits puedo obtener un 𝑤 tal que 𝑑𝐻(𝑣, 𝑤) = 𝑟
+
+=> hay biyección entre 𝑆𝑟(𝑣) y el conjunto de subconjuntos de 𝑟 bits
+
+=> la cardinalidad de estos 2 es la misma
+|𝑆𝑟(𝑣)| = 𝑛𝐶𝑟 => |𝐷𝑡(𝑣)| = ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟
+
+|𝐴| = ∑_{𝑣 ∈ 𝐶} |𝐷𝑡(𝑣)| = ∑_{𝑣 ∈ 𝐶} ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟
+
+∑_{𝑣 ∈ 𝐶} ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟 es |𝐶| veces lo mismo (∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟)
+
+=> |𝐴| = |𝐶| ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟
+
+=> |𝐶| = |𝐴| / ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟
+
+∴ 𝐴 ⊆ {0, 1}^𝑛 => |𝐴| ≤ 2^𝑛
+=> |𝐶| ≤ 2^𝑛 / ∑_{𝑟 = 0}^{𝑡} 𝑛𝐶𝑟
 
 ### Teorema de la Distancia Mínima y la Matriz de Chequeo
 
