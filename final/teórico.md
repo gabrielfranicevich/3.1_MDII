@@ -325,8 +325,8 @@ Sean ƒ un flujo maximal
     2. Considerando el segundo termino (Aristas que entran a 𝑆):
         * ƒ(𝑆ᶜ, 𝑆) = ∑_{→𝑣𝑢 ∈ 𝐸}[𝑣 ∉ 𝑆] [𝑢 ∈ 𝑆] ƒ(→𝑣𝑢)
           * Sea →𝑢𝑣 ∈ 𝐸 con 𝑣 ∉ 𝑆 y 𝑢 ∈ 𝑆
-            * ∵ 𝑢 ∉ 𝑆 => ¬∃ƒ-camino aumentante entre 𝓈 y 𝑢
-            * ∵ 𝑣 ∈ 𝑆 => ∃ƒ-camino aumentante entre 𝓈 y 𝑣
+            * ∵ 𝑣 ∉ 𝑆 => ¬∃ƒ-camino aumentante entre 𝓈 y 𝑣
+            * ∵ 𝑢 ∈ 𝑆 => ∃ƒ-camino aumentante entre 𝓈 y 𝑢
             * ∵ ∃←𝑣𝑢
               * ƒ(→𝑢𝑣) > 0 => ∃ƒ-camino aumentante de 𝓈 a 𝑢 con 𝓈…(←𝑣𝑢)
                 * ∵ sabemos que ¬∃ƒ-camino aumentante de 𝓈 a 𝑢
