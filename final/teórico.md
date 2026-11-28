@@ -1120,9 +1120,9 @@ otra forma de verlo:
 
 Teo. La complejidad del algoritmo "minimizar la suma",
 también llamado "algoritmo húngaro",
-tal como fue dado en clase haciéndolo a mano, es 𝑂(𝑛^4)
+tal como fue dado en clase haciéndolo a mano, es 𝑂(𝑛⁴)
 
-Teo. El algoritmo húngaro se puede codificar con complejidad 𝑂(𝑛^3).
+Teo. El algoritmo húngaro se puede codificar con complejidad 𝑂(𝑛³).
 
 Prueba:
 
